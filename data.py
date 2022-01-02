@@ -1,10 +1,10 @@
-ESCALATOR_CAPACITY = 6750  # persons per hour
+ESCALATOR_CAPACITY = 2000  # persons per hour
 AVG_WALKING_SPEED = 5000  # metres per hour
 P_PB_CAPACITY = 2000  # platform to pod bay capacity in persons per hour
 P_P_CAPACITY = 2000  # braess route capacity
 P_PB_DST = 26  # platform to first pod bay distance
 PB_PB_DST = 13  # distance between consecutive pod bays
-P_P_DST = 13  # distance between consecutive platforms
+P_P_DST = 8  # distance between consecutive platforms
 
 graph = [
     (
@@ -54,7 +54,7 @@ graph = [
 ] + [(str(n), []) for n in range(14, 92)]
 
 capacity = (
-    [2000] * 13
+    [5000] * 13
     + [ESCALATOR_CAPACITY] * 13
     + [P_P_CAPACITY, *[P_PB_CAPACITY] * 6]
     + [P_P_CAPACITY, P_P_CAPACITY, *[P_PB_CAPACITY] * 6] * 11
@@ -63,8 +63,8 @@ capacity = (
 
 
 free_time = (
-    [0.5 / 60] * 13
-    + [1 / 60] * 13
+    [0.5 / 60] * 13  # drop-off to ticketing
+    + [2 / 60] * 13  # escalators
     + [
         P_P_DST / AVG_WALKING_SPEED,
         *[(P_PB_DST + i * PB_PB_DST) / AVG_WALKING_SPEED for i in range(6)],
@@ -88,15 +88,5 @@ destinations = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "
 
 # Demand between each OD pair (Conjugated to the Cartesian
 # product of Origins and destinations with order)
-same_platform = (16000 / 13) * (70 / 100)
-diff_platform = (16000 / 13) * (30 / 100)
 
-demand = []
-for i in range(len(origins)):
-    for j in range(len(destinations)):
-        if i > j:
-            demand.append(0)
-        elif i == j:
-            demand.append(same_platform)
-        else:
-            demand.append(diff_platform / (len(destinations) - i - 1))
+demand = [1000, 2000] + [1000] * 11

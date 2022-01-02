@@ -19,12 +19,12 @@ class TrafficFlowModel:
         link_capacity=None,
     ):
 
-        self.__network = TrafficNetwork(graph=graph, O=origins, D=destinations)
+        self._network = TrafficNetwork(graph=graph, O=origins, D=destinations)
 
         # Initialization of parameters
-        self.__link_free_time = np.array(link_free_time)
-        self.__link_capacity = np.array(link_capacity)
-        self.__demand = np.array(demands)
+        self._link_free_time = np.array(link_free_time)
+        self._link_capacity = np.array(link_capacity)
+        self._demand = np.array(demands)
 
         # Alpha and beta (used in performance function)
         self._alpha = 0.15
@@ -46,13 +46,13 @@ class TrafficFlowModel:
 
     def __insert_links_in_order(self, links):
         """Insert the links as the expected order into the
-        data structure `TrafficFlowModel.__network`
+        data structure `TrafficFlowModel._network`
         """
         first_vertice = [link[0] for link in links]
         for vertex in first_vertice:
-            self.__network.add_vertex(vertex)
+            self._network.add_vertex(vertex)
         for link in links:
-            self.__network.add_edge(link)
+            self._network.add_edge(link)
 
     def solve(self):
         """Solve the traffic flow assignment model (user equilibrium)
@@ -74,7 +74,7 @@ class TrafficFlowModel:
             print(self.__dash_line())
 
         # Step 0: based on the x0, generate the x1
-        empty_flow = np.zeros(self.__network.num_of_links())
+        empty_flow = np.zeros(self._network.num_of_links())
         link_flow = self.__all_or_nothing_assign(empty_flow)
 
         counter = 0
@@ -103,7 +103,7 @@ class TrafficFlowModel:
                 print("Auxiliary link flow:\n%s" % auxiliary_link_flow)
 
             # Step 5: Check the Convergence, if FALSE, then return to Step 1
-            if self.__is_convergent(link_flow, new_link_flow):
+            if self.__is_convergent(link_flow, new_link_flow) or counter > 90:
                 if self.__detail:
                     print(self.__dash_line())
                 self.__solved = True
@@ -126,7 +126,7 @@ class TrafficFlowModel:
             link_flow = self.__final_link_flow
             link_time = self.__link_flow_to_link_time(link_flow)
             path_time = self.__link_time_to_path_time(link_time)
-            link_vc = link_flow / self.__link_capacity
+            link_vc = link_flow / self._link_capacity
             return link_flow, link_time, path_time, link_vc
         else:
             return None
@@ -156,12 +156,12 @@ class TrafficFlowModel:
             print(self.__dash_line())
             print("PERFORMANCE OF LINKS")
             print(self.__dash_line())
-            for i in range(self.__network.num_of_links()):
+            for i in range(self._network.num_of_links()):
                 print(
                     "%2d : link= %12s, flow= %8.2f, time= %8.3f, v/c= %.3f"
                     % (
                         i,
-                        self.__network.edges()[i],
+                        self._network.edges()[i],
                         link_flow[i],
                         link_time[i],
                         link_vc[i],
@@ -171,17 +171,17 @@ class TrafficFlowModel:
             print("PERFORMANCE OF PATHS (GROUP BY ORIGIN-DESTINATION PAIR)")
             print(self.__dash_line())
             counter = 0
-            for i in range(self.__network.num_of_paths()):
-                if counter < self.__network.paths_category()[i]:
+            for i in range(self._network.num_of_paths()):
+                if counter < self._network.paths_category()[i]:
                     counter = counter + 1
                     print(self.__dash_line())
                 print(
                     "%2d : group= %2d, time= %8.3f, path= %s"
                     % (
                         i,
-                        self.__network.paths_category()[i],
+                        self._network.paths_category()[i],
                         path_time[i],
-                        self.__network.paths()[i],
+                        self._network.paths()[i],
                     )
                 )
             print(self.__dash_line())
@@ -210,17 +210,17 @@ class TrafficFlowModel:
         # Find the minimal traveling time within group
         # (splited by origin - destination pairs) and
         # assign all the flow to that path
-        path_flow = np.zeros(self.__network.num_of_paths())
-        for OD_pair_index in range(self.__network.num_of_OD_pairs()):
+        path_flow = np.zeros(self._network.num_of_paths())
+        for OD_pair_index in range(self._network.num_of_OD_pairs()):
             indice_grouped = []
-            for path_index in range(self.__network.num_of_paths()):
-                if self.__network.paths_category()[path_index] == OD_pair_index:
+            for path_index in range(self._network.num_of_paths()):
+                if self._network.paths_category()[path_index] == OD_pair_index:
                     indice_grouped.append(path_index)
             sub_path_time = [path_time[ind] for ind in indice_grouped]
             min_in_group = min(sub_path_time)
             ind_min = sub_path_time.index(min_in_group)
             target_path_ind = indice_grouped[ind_min]
-            path_flow[target_path_ind] = self.__demand[OD_pair_index]
+            path_flow[target_path_ind] = self._demand[OD_pair_index]
         if self.__detail:
             print("Link time:\n%s" % link_time)
             print("Path flow:\n%s" % path_flow)
@@ -237,11 +237,11 @@ class TrafficFlowModel:
         traveling time.
         The input is an array.
         """
-        n_links = self.__network.num_of_links()
+        n_links = self._network.num_of_links()
         link_time = np.zeros(n_links)
         for i in range(n_links):
             link_time[i] = self.__link_time_performance(
-                link_flow[i], self.__link_free_time[i], self.__link_capacity[i]
+                link_flow[i], self._link_free_time[i], self._link_capacity[i]
             )
         return link_time
 
@@ -251,7 +251,7 @@ class TrafficFlowModel:
         the path traveling time.
         The input is an array.
         """
-        path_time = link_time.dot(self.__network.LP_matrix())
+        path_time = link_time.dot(self._network.LP_matrix())
         return path_time
 
     def __path_flow_to_link_flow(self, path_flow):
@@ -259,12 +259,12 @@ class TrafficFlowModel:
         matrix to compute the traffic flow on each link.
         The input is an array.
         """
-        link_flow = self.__network.LP_matrix().dot(path_flow)
+        link_flow = self._network.LP_matrix().dot(path_flow)
         return link_flow
 
     def _get_path_free_time(self):
         """Only used in the final evaluation, not the recursive structure"""
-        path_free_time = self.__link_free_time.dot(self.__network.LP_matrix())
+        path_free_time = self._link_free_time.dot(self._network.LP_matrix())
         return path_free_time
 
     def __link_time_performance(self, link_flow, t0, capacity):
@@ -297,11 +297,11 @@ class TrafficFlowModel:
         is mixed_flow in this case.
         """
         val = 0
-        for i in range(self.__network.num_of_links()):
+        for i in range(self._network.num_of_links()):
             val += self.__link_time_performance_integrated(
                 link_flow=mixed_flow[i],
-                t0=self.__link_free_time[i],
-                capacity=self.__link_capacity[i],
+                t0=self._link_free_time[i],
+                capacity=self._link_capacity[i],
             )
         return val
 
@@ -390,41 +390,41 @@ class TrafficFlowModel:
         string += "LINK Information:\n"
         string += self.__dash_line()
         string += "\n"
-        for i in range(self.__network.num_of_links()):
+        for i in range(self._network.num_of_links()):
             string += "%2d : link= %s, free time= %.2f, capacity= %s \n" % (
                 i,
-                self.__network.edges()[i],
-                self.__link_free_time[i],
-                self.__link_capacity[i],
+                self._network.edges()[i],
+                self._link_free_time[i],
+                self._link_capacity[i],
             )
         string += self.__dash_line()
         string += "\n"
         string += "OD Pairs Information:\n"
         string += self.__dash_line()
         string += "\n"
-        for i in range(self.__network.num_of_OD_pairs()):
+        for i in range(self._network.num_of_OD_pairs()):
             string += "%2d : OD pair= %s, demand= %d \n" % (
                 i,
-                self.__network.OD_pairs()[i],
-                self.__demand[i],
+                self._network.OD_pairs()[i],
+                self._demand[i],
             )
         string += self.__dash_line()
         string += "\n"
         string += "Path Information:\n"
         string += self.__dash_line()
         string += "\n"
-        for i in range(self.__network.num_of_paths()):
+        for i in range(self._network.num_of_paths()):
             string += "%2d : Conjugated OD pair= %s, Path= %s \n" % (
                 i,
-                self.__network.paths_category()[i],
-                self.__network.paths()[i],
+                self._network.paths_category()[i],
+                self._network.paths()[i],
             )
         string += self.__dash_line()
         string += "\n"
         string += (
-            f"Link-Path Incidence Matrix (Rank: {self.__network.LP_matrix_rank()}):\n"
+            f"Link-Path Incidence Matrix (Rank: {self._network.LP_matrix_rank()}):\n"
         )
         string += self.__dash_line()
         string += "\n"
-        string += str(self.__network.LP_matrix())
+        string += str(self._network.LP_matrix())
         return string

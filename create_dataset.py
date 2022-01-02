@@ -1,0 +1,39 @@
+import numpy as np
+from model import TrafficFlowModel
+import data as dt
+import pickle
+
+FILENAME = "train_dataset"
+
+
+def create_dataset(num_data_points, low, high):
+    data = []
+
+    for i in range(num_data_points):
+        demand = np.random.randint(low, high, (13,))
+        mod = TrafficFlowModel(
+            dt.graph, dt.origins, dt.destinations, demand, dt.free_time, dt.capacity
+        )
+        link_info_matrix = np.concatenate(
+            [mod._link_capacity[:, np.newaxis], mod._link_free_time[:, np.newaxis]],
+            axis=1,
+        )
+
+        x = np.concatenate(
+            [
+                link_info_matrix.flatten(),
+                mod._demand,
+            ]
+        )
+
+        mod._conv_accuracy = 1e-5
+        mod.solve()
+        link_flow, link_time, path_time, link_vc = mod._formatted_solution()
+
+        data.append((x, link_flow))
+
+    with open(FILENAME, "wb") as f:
+        pickle.dump(data, f)
+
+
+create_dataset(10000, 100, 1600)
