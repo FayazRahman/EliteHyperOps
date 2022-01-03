@@ -78,10 +78,10 @@ def test(dataloader, model, loss_fn):
             pred = model(X.float())
             test_loss += loss_fn(pred, y.float()).item()
     test_loss /= num_batches
-    print(f"Avg loss: {test_loss:>8f} \n")
+    print(f"Test Avg loss: {test_loss:>8f} \n")
 
 
-epochs = 5
+epochs = 150
 for t in range(epochs):
     print(f"Epoch {t+1}\n-------------------------------")
     train(train_dataloader, model, loss_fn, optimizer)
