@@ -1,50 +1,55 @@
+import torch
 import numpy as np
-from model import TrafficFlowModel
 import data as dt
+from model import TrafficFlowModel
+from nn_model import NeuralNetwork
 
-# Initialize the model by data
+demand = [
+    1000,
+    1500,
+    1250,
+    1300,
+    1000,
+    450,
+    1200,
+    1300,
+    1030,
+    1000,
+    600,
+    1050,
+    1200,
+]  # custom demands
+
 mod = TrafficFlowModel(
-    dt.graph, dt.origins, dt.destinations, dt.demand, dt.free_time, dt.capacity
+    dt.graph, dt.origins, dt.destinations, demand, dt.free_time, dt.capacity
 )
 
-lp_matrix = mod._network.LP_matrix()
 link_info_matrix = np.concatenate(
-    [mod._link_capacity[:, np.newaxis], mod._link_free_time[:, np.newaxis]], axis=1
+    [mod._link_capacity[:, np.newaxis], mod._link_free_time[:, np.newaxis]],
+    axis=1,
 )
 
-demands = mod._demand
-n_nodes = len(dt.graph)
-od_demand_matrix = np.zeros((n_nodes, n_nodes))
 
-idx = 0
-for i, j in mod._network.OD_pairs():
-    od_demand_matrix[int(i) - 1, int(j) - 1] = demands[idx]
-    idx += 1
+def turn_off_braess(idx):
+    link_idx = dt.braess_idxs[idx]
+    mod._link_capacity[link_idx] = 1
+    mod._link_free_time[link_idx] = 1000
 
-print(lp_matrix)
-print(link_info_matrix)
-print(od_demand_matrix)
 
-print(lp_matrix.shape)
-print(link_info_matrix.shape)
-print(od_demand_matrix.shape)
+def turn_on_braess(idx):
+    link_idx = dt.braess_idxs[idx]
+    mod._link_capacity[link_idx] = dt.capacity[link_idx]
+    mod._link_free_time[link_idx] = dt.free_time[link_idx]
 
-# Change the accuracy of solution if necessary
-mod._conv_accuracy = 1e-6
 
-# Display all the numerical details of
-# each variable during the iteritions
-# mod.disp_detail()
+def get_input(demand):
+    x = torch.tensor(
+        np.concatenate(
+            [
+                link_info_matrix.flatten(),
+                demand,
+            ]
+        )
+    )
 
-# Set the precision of display, which influences
-# only the digit of numerical component in arrays
-mod.set_disp_precision(4)
-
-# Solve the model by Frank-Wolfe Algorithm
-mod.solve()
-
-# Generate report to console
-# mod.report()
-
-# Return the solution if necessary
-link_flow, link_time, path_time, link_vc = mod._formatted_solution()
+    return x

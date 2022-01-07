@@ -1,47 +1,17 @@
 import torch
-import pickle
 from torch import nn
-from torch.utils.data import Dataset, DataLoader
+from torch.utils.data import DataLoader
+from nn_model import NeuralNetwork, FrankWolfeDataset
 
 
-class FrankWolfeDataset(Dataset):
-    def __init__(self, file):
-        self.file = file
-        with open(self.file, "rb") as f:
-            self.data = pickle.load(f)
-
-    def __len__(self):
-        return len(self.data)
-
-    def __getitem__(self, idx):
-        if torch.is_tensor(idx):
-            idx = idx.tolist()
-
-        x, y = self.data[idx]
-
-        return x, y
-
-
-train_dataset = FrankWolfeDataset("train_dataset")
-test_dataset = FrankWolfeDataset("test_dataset")
+train_dataset = FrankWolfeDataset("datasets/train_dataset")
+test_dataset = FrankWolfeDataset("datasets/test_dataset")
 
 train_dataloader = DataLoader(train_dataset, batch_size=128, shuffle=True)
 test_dataloader = DataLoader(test_dataset, batch_size=128, shuffle=True)
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
 print("Using {} device".format(device))
-
-
-class NeuralNetwork(nn.Module):
-    def __init__(self):
-        super(NeuralNetwork, self).__init__()
-        self.linear_relu_stack = nn.Sequential(
-            nn.Linear(269, 2 * 269 + 1), nn.ReLU(), nn.Linear(269 * 2 + 1, 128)
-        )
-
-    def forward(self, x):
-        logits = self.linear_relu_stack(x)
-        return logits
 
 
 model = NeuralNetwork().to(device)

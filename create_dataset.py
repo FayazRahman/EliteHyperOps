@@ -4,13 +4,11 @@ from model import TrafficFlowModel
 import data as dt
 import pickle
 
-FILENAME = "train_dataset"
+FILENAME = "test_dataset"
 
 
 def create_dataset(num_data_points, low, high):
     with open(FILENAME, "ab") as f:
-        epsilon = 1e-7
-
         for i in range(num_data_points):
             demand = np.random.randint(low, high, (13,))
 
@@ -19,8 +17,8 @@ def create_dataset(num_data_points, low, high):
             free_time, capacity = dt.free_time.copy(), dt.capacity.copy()
 
             for drop_idx in drop_links:
-                free_time[drop_idx] = 1 / epsilon
-                capacity[drop_idx] = epsilon
+                free_time[drop_idx] = 1000
+                capacity[drop_idx] = 1
 
             mod = TrafficFlowModel(
                 dt.graph, dt.origins, dt.destinations, demand, free_time, capacity
@@ -53,6 +51,3 @@ def create_dataset(num_data_points, low, high):
 
     with open(FILENAME, "wb") as f:
         pickle.dump(data, f)
-
-
-create_dataset(12800, 100, 1600)

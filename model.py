@@ -103,7 +103,7 @@ class TrafficFlowModel:
                 print("Auxiliary link flow:\n%s" % auxiliary_link_flow)
 
             # Step 5: Check the Convergence, if FALSE, then return to Step 1
-            if self.__is_convergent(link_flow, new_link_flow) or counter > 90:
+            if self.__is_convergent(link_flow, new_link_flow):
                 if self.__detail:
                     print(self.__dash_line())
                 self.__solved = True
@@ -124,8 +124,8 @@ class TrafficFlowModel:
         """
         if self.__solved:
             link_flow = self.__final_link_flow
-            link_time = self.__link_flow_to_link_time(link_flow)
-            path_time = self.__link_time_to_path_time(link_time)
+            link_time = self.link_flow_to_link_time(link_flow)
+            path_time = self.link_time_to_path_time(link_time)
             link_vc = link_flow / self._link_capacity
             return link_flow, link_time, path_time, link_vc
         else:
@@ -202,9 +202,9 @@ class TrafficFlowModel:
         The input is an array.
         """
         # LINK FLOW -> LINK TIME
-        link_time = self.__link_flow_to_link_time(link_flow)
+        link_time = self.link_flow_to_link_time(link_flow)
         # LINK TIME -> PATH TIME
-        path_time = self.__link_time_to_path_time(link_time)
+        path_time = self.link_time_to_path_time(link_time)
 
         # PATH TIME -> PATH FLOW
         # Find the minimal traveling time within group
@@ -231,7 +231,7 @@ class TrafficFlowModel:
 
         return new_link_flow
 
-    def __link_flow_to_link_time(self, link_flow):
+    def link_flow_to_link_time(self, link_flow):
         """Based on current link flow, use link
         time performance function to compute the link
         traveling time.
@@ -245,7 +245,7 @@ class TrafficFlowModel:
             )
         return link_time
 
-    def __link_time_to_path_time(self, link_time):
+    def link_time_to_path_time(self, link_time):
         """Based on current link traveling time,
         use link-path incidence matrix to compute
         the path traveling time.
