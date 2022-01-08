@@ -18,16 +18,23 @@ demand = [
     600,
     1050,
     1200,
-]  # custom demands
+]  # sample demands
+
+model = NeuralNetwork()
+model.load_state_dict(torch.load("frank_wolfe_nn"))
+model.eval()
 
 mod = TrafficFlowModel(
     dt.graph, dt.origins, dt.destinations, demand, dt.free_time, dt.capacity
 )
 
-link_info_matrix = np.concatenate(
-    [mod._link_capacity[:, np.newaxis], mod._link_free_time[:, np.newaxis]],
-    axis=1,
-)
+
+def get_link_info_matrix():
+    link_info_matrix = np.concatenate(
+        [mod._link_capacity[:, np.newaxis], mod._link_free_time[:, np.newaxis]],
+        axis=1,
+    )
+    return link_info_matrix
 
 
 def turn_off_braess(idx):
@@ -46,7 +53,7 @@ def get_input(demand):
     x = torch.tensor(
         np.concatenate(
             [
-                link_info_matrix.flatten(),
+                get_link_info_matrix().flatten(),
                 demand,
             ]
         )
