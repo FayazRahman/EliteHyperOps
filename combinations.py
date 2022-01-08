@@ -23,7 +23,8 @@ pt=tm.__link_time_to_path_time(lt)
 #average_time = np.mean()
 print(pt,pt.shape)
 min=10000000000000
-
+tracker_i=0
+tracker_j=0
 for(i in range(0,13)):
     comb = combinations(braess_idxs, i)
     for j in comb:
