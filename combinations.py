@@ -12,16 +12,16 @@ tm=TrafficFlowModel()
 model = NeuralNetwork()
 model.load_state_dict(torch.load("frank_wolfe_nn"))
 model.eval()
-test_dataset = FrankWolfeDataset("test_dataset")
-print (test_dataset)
-test_dataloader = DataLoader(test_dataset, batch_size=128, shuffle=True)
-with torch.no_grad():    
-   out_data = model(torch.from_numpy(test_dataset[0][0]).float())
-lt=tm.__link_flow_to_link_time(out_data)
-pt=tm.__link_time_to_path_time(lt)
+#test_dataset = FrankWolfeDataset("test_dataset")
+#print (test_dataset)
+#test_dataloader = DataLoader(test_dataset, batch_size=128, shuffle=True)
+#with torch.no_grad():    
+ #  out_data = model(torch.from_numpy(test_dataset[0][0]).float())
+#lt=tm.__link_flow_to_link_time(out_data)
+#pt=tm.__link_time_to_path_time(lt)
 #print(out_data,out_data.shape)
 #average_time = np.mean()
-print(pt,pt.shape)
+#print(pt,pt.shape)
 min=10000000000000
 tracker_i=0
 tracker_j=0
