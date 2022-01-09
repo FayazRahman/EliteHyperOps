@@ -33,6 +33,7 @@ for(i in range(0,13)):
             out_data = model(torch.from_numpy(get_input(demand)).float())
         lt=tm.__link_flow_to_link_time(out_data)
         pt=tm.__link_time_to_path_time(lt)
+        pt=np.average(pt)
         #average_time = np.mean()
         if(pt<min):
             min=pt
