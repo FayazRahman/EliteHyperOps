@@ -103,13 +103,16 @@ def get_best_state(demand):
     for k in range(1,6):
         comb = combinations(dt.braess_idxs,k)
         for j in comb:
-            turn_off_braess(c for c in j)
+            #turn_off_braess(c for c in j)
+            for c in j:
+                turn_off_braess(c)
             avg_time = run(demand)
 
             if avg_time < min:
                 min = avg_time
                 state = (j)
-            turn_on_braess(c for c in j)
+            for c in j:
+                turn_on_braess(c)
     return state
 
 print(get_best_state(demand))
