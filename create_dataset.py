@@ -4,7 +4,7 @@ from model import TrafficFlowModel
 import data as dt
 import pickle
 
-FILENAME = "test_dataset"
+FILENAME = "train_dataset"
 
 
 def create_dataset(num_data_points, low, high):
@@ -51,4 +51,4 @@ def create_dataset(num_data_points, low, high):
 
     with open(FILENAME, "wb") as f:
         pickle.dump(data, f)
-create_dataset(25600, 100, 1300)
+create_dataset(50, 100, 1300)

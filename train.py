@@ -4,8 +4,8 @@ from torch.utils.data import DataLoader
 from nn_model import NeuralNetwork, FrankWolfeDataset
 
 
-train_dataset = FrankWolfeDataset("datasets/train_dataset")
-test_dataset = FrankWolfeDataset("datasets/test_dataset")
+train_dataset = FrankWolfeDataset("train_dataset")
+test_dataset = FrankWolfeDataset("test_dataset")
 
 train_dataloader = DataLoader(train_dataset, batch_size=128, shuffle=True)
 test_dataloader = DataLoader(test_dataset, batch_size=128, shuffle=True)

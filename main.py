@@ -4,7 +4,7 @@ import numpy as np
 import data as dt
 from model import TrafficFlowModel
 from nn_model import NeuralNetwork
-
+device = "cuda" if torch.cuda.is_available() else "cpu"
 demand = [
     1000,
     1500,
@@ -21,8 +21,8 @@ demand = [
     1200,
 ]  # sample demands
 
-model = NeuralNetwork()
-model.load_state_dict(torch.load("frank_wolfe_nn"))
+model = NeuralNetwork().to(device)
+model.load_state_dict(torch.load("frank_wolfe_nn", map_location=torch.device(device)))
 model.eval()
 
 mod = TrafficFlowModel(
@@ -73,13 +73,13 @@ def get_link_info(): #changed the name of get_link_info_matrix to get_link_info
 
 
 def turn_off_braess(idx):
-    link_idx = dt.braess_idxs[idx]
+    link_idx = idx #dt.braess_idxs[idx]
     mod._link_capacity[link_idx] = 1
     mod._link_free_time[link_idx] = 1000
 
 
 def turn_on_braess(idx):
-    link_idx = dt.braess_idxs[idx]
+    link_idx = idx
     mod._link_capacity[link_idx] = dt.capacity[link_idx]
     mod._link_free_time[link_idx] = dt.free_time[link_idx]
 
