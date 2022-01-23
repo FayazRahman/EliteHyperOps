@@ -51,3 +51,4 @@ def create_dataset(num_data_points, low, high):
 
     with open(FILENAME, "wb") as f:
         pickle.dump(data, f)
+create_dataset(25600, 100, 1300)
