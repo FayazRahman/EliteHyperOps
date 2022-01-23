@@ -49,4 +49,8 @@ mod.report()
 # Return the solution if necessary
 link_flow, link_time, path_time, link_vc = mod._formatted_solution()
 
-print(path_time)
+np.savetxt("linkflowfile", link_flow, fmt='%.18e', delimiter=' ', newline='\n', header='', footer='', comments='# ', encoding=None)
+np.savetxt("linktimefile", link_time, fmt='%.18e', delimiter=' ', newline='\n', header='', footer='', comments='# ', encoding=None)
+np.savetxt("pathtimefile", path_time, fmt='%.18e', delimiter=' ', newline='\n', header='', footer='', comments='# ', encoding=None)
+
+#print(path_time)
