@@ -4,6 +4,7 @@ import numpy as np
 import data as dt
 from model import TrafficFlowModel
 from nn_model import NeuralNetwork
+from math import comb as co
 device = "cuda" if torch.cuda.is_available() else "cpu"
 demand = [
     1000,
@@ -65,11 +66,8 @@ def run(demand):
 
 
 def get_link_info(): #changed the name of get_link_info_matrix to get_link_info
-    link_info_matrix = np.concatenate(
-        [mod._link_capacity[:, np.newaxis], mod._link_free_time[:, np.newaxis]],
-        axis=1,
-    )
-    return link_info_matrix
+    link_info = np.concatenate([mod._link_capacity[:], mod._link_free_time[:]])
+    return link_info
 
 
 def turn_off_braess(idx):
@@ -102,12 +100,13 @@ def get_best_state(demand):
     min = 100000000
     for k in range(1,6):
         comb = combinations(dt.braess_idxs,k)
+        print(co(len(dt.braess_idxs),k),"number of combinations, taken",k,"at a time")
+      
         for j in comb:
-            #turn_off_braess(c for c in j)
             for c in j:
                 turn_off_braess(c)
             avg_time = run(demand)
-
+            print(avg_time)
             if avg_time < min:
                 min = avg_time
                 state = (j)
@@ -115,5 +114,5 @@ def get_best_state(demand):
                 turn_on_braess(c)
     return state
 
-print(get_best_state(demand))
+print("The Braess Routes that needs to be Disincentivised are : ",get_best_state(demand))
 
