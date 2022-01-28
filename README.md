@@ -16,4 +16,10 @@ How to use the software in the real Hyperloop Station.
 
 Hence, Our Software can revolutionalize how we tackle the problem of Traffic Management.  
 
+EliteHyperOps Project created by team members, for Hyperops Competition of IIT Bombay Techfest 2021:-
+Uday Uppal
+Fayaz Rahman
+Yashvardhan Gaur(Team Leader)
+Tarush
+
 graph.py, model.py taken from this [awesome repo](https://github.com/ZhengLi95/User-Equilibrium-Solution) by [ZhengLi95.](https://github.com/ZhengLi95)
