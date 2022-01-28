@@ -1,6 +1,6 @@
 # EliteHyperOps
 
-EliteHyperOps Project created for Hyperops Competition of IIT Bombay Techfest 2021.The Team members who created the project are: 
+The Project is developed for Hyperops Competition held at IIT Bombay Techfest 2021. The Team members who created the project are: 
 Uday Uppal,
 Fayaz Rahman,
 Yashvardhan Gaur(Team Leader),
