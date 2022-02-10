@@ -6,13 +6,7 @@ Fayaz Rahman,
 Yashvardhan Gaur(Team Leader),
 Tarush
 
-Create_Dataset.py is used to generate data on which we train the Neural Network in train.py file. The reason we are training the Neural Network , instead of using the actual Frank Wolfe is because FW is computationally expensive. And, to achieve our end goal of detecting braess routes, we need to apply it multiple times. A well trained NN will give us lower computational cost and make our solution realtime.
-
-Graph.py and Model.py are the File that contain actual Franke Wolfe Algorithm Implementation. Example.py is used to combine them and run actual Franke Wolfe Algorithm. Data.py contains all the data(like graphs, demand, capacity, potential routes that need to be checked for braess routes(braess indexes)) which corresponds to Hyperloop Station in Pune. frank_wolfe_nn is our trained Neural Network. Presently it is trained on 3100 data points with average loss of 8.170. Main.py uses the trained Neural Network to output the Braess Routes. Here, we have searched for braess routes only in links between the Hyperloop Platforms, because these routes that have the highest concentration of traffic during peak hours. But our software is eqully capable of scanning the whole network for these braess routes. 
-
-We have two folders for SUMO Simulation, which simulates the Hyperloop station. Using it we confirmed the effectiveness of our software, by howing that removing/dinincentivising the braess routes helps improve traffic condition. The ORIGINAL folder contains the SUMO Simulation for normal Hyperloop Station. The 2nd folder contains the SUMO simulation after removing the braess routes as returned by the output of main.py. Using any random deman, we found that the Routes that needs to be Disincentivised are :  (64, 75, 81, 82, 93). This is the number of edge, related to the adjecency list of the graph in data.py . After running the simulation, by executing Configuration files in these foulder in SUMO GUI, the results were: 
-1)The time taken by traffic to reach its destination in original network : 1595 seconds 
-2)The time taken by traffic to reach its destination in network devoid of braess routes: 1511 seconds 
+NOTE: We tried to make our Software Solution highly automated. Hence, we have not created any FRONT-End of the Software, because, If our software is integrated with the Camera, CCTV, Realtime Mobile Signal Sensors, Digital Sign Boards, Automatic Notification System(for passengers), it would require NO HUMAN Interference at all, be it by passengers or backend officials, except for maintenance work.
 
 How to use the software in the real Hyperloop Station.
 
@@ -22,5 +16,15 @@ How to use the software in the real Hyperloop Station.
 4) Before implementing the results of Main.py, we can simulate the traffic with SUMO to know the effectiveness of the solution.
 
 Hence, Our Software can revolutionalize how we tackle the problem of Traffic Management.  
+
+
+Create_Dataset.py is used to generate data on which we train the Neural Network in train.py file. The reason we are training the Neural Network , instead of using the actual Frank Wolfe is because FW is computationally expensive. And, to achieve our end goal of detecting braess routes, we need to apply it multiple times. A well trained NN will give us lower computational cost and make our solution realtime.
+
+Graph.py and Model.py are the File that contain actual Franke Wolfe Algorithm Implementation. Example.py is used to combine them and run actual Franke Wolfe Algorithm. Data.py contains all the data(like graphs, demand, capacity, potential routes that need to be checked for braess routes(braess indexes)) which corresponds to Hyperloop Station in Pune. frank_wolfe_nn is our trained Neural Network. Presently it is trained on 3100 data points with average loss of 8.170. Main.py uses the trained Neural Network to output the Braess Routes. Here, we have searched for braess routes only in links between the Hyperloop Platforms, because these routes that have the highest concentration of traffic during peak hours. But our software is eqully capable of scanning the whole network for these braess routes. 
+
+We have two folders for SUMO Simulation, which simulates the Hyperloop station. Using it we confirmed the effectiveness of our software, by howing that removing/dinincentivising the braess routes helps improve traffic condition. The ORIGINAL folder contains the SUMO Simulation for normal Hyperloop Station. The 2nd folder contains the SUMO simulation after removing the braess routes as returned by the output of main.py. Using any random deman, we found that the Routes that needs to be Disincentivised are :  (64, 75, 81, 82, 93). This is the number of edge, related to the adjecency list of the graph in data.py . After running the simulation, by executing Configuration files in these foulder in SUMO GUI, the results were: 
+1)The time taken by traffic to reach its destination in original network : 1595 seconds 
+2)The time taken by traffic to reach its destination in network devoid of braess routes: 1511 seconds 
+
 
 graph.py, model.py taken from this [awesome repo](https://github.com/ZhengLi95/User-Equilibrium-Solution) by [ZhengLi95.](https://github.com/ZhengLi95)
