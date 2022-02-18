@@ -6,6 +6,7 @@ Fayaz Rahman,
 Yashvardhan Gaur(Team Leader),
 Tarush
 
+
 NOTE: We tried to make our Software Solution highly automated. Hence, we have not created any FRONT-End of the Software, because, If our software is integrated with the Camera, CCTV, Realtime Mobile Signal Sensors, Digital Sign Boards, Automatic Notification System(for passengers), it would require NO HUMAN Interference at all, be it by passengers or backend officials, except for maintenance work.
 
 How to use the software in the real Hyperloop Station.
