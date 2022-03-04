@@ -6,8 +6,8 @@ Fayaz Rahman,
 Yashvardhan Gaur(Team Leader),
 Tarush
 
-
-NOTE: We tried to make our Software Solution highly automated. Hence, we have not created any FRONT-End of the Software, because, If our software is integrated with the Camera, CCTV, Realtime Mobile Signal Sensors, Digital Sign Boards, Automatic Notification System(for passengers), it would require NO HUMAN Interference at all, be it by passengers or backend officials, except for maintenance work.
+*************************
+NOTE: Our Traffic Management Software Solution is a highly automated which has all the perks to transform how we deal with Traffic Management.  If our software is integrated with the Camera, CCTV, Realtime Mobile Signal Sensors, Digital Sign Boards, Automatic Notification System(for passengers), it would require NO HUMAN Interference at all, be it by passengers or backend officials, except for maintenance.
 
 How to use the software in the real Hyperloop Station.
 
@@ -17,7 +17,7 @@ How to use the software in the real Hyperloop Station.
 4) Before implementing the results of Main.py, we can simulate the traffic with SUMO to know the effectiveness of the solution.
 
 Hence, Our Software can revolutionalize how we tackle the problem of Traffic Management.  
-
+****************************
 
 Create_Dataset.py is used to generate data on which we train the Neural Network in train.py file. The reason we are training the Neural Network , instead of using the actual Frank Wolfe is because FW is computationally expensive. And, to achieve our end goal of detecting braess routes, we need to apply it multiple times. A well trained NN will give us lower computational cost and make our solution realtime.
 
