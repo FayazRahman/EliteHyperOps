@@ -7,7 +7,7 @@ Yashvardhan Gaur(Team Leader),
 Tarush
 
 *************************
-NOTE: Our Traffic Management Software Solution is a highly automated which has all the perks to transform how we deal with Traffic Management.  If our software is integrated with the Camera, CCTV, Realtime Mobile Signal Sensors, Digital Sign Boards, Automatic Notification System(for passengers), it would require NO HUMAN Interference at all, be it by passengers or backend officials, except for maintenance.
+NOTE: Our Traffic Management Software Solution is a highly automated which has all the perks to transform how we deal with Traffic Management.  If our software is integrated with the Camera, CCTV, Realtime Mobile Signal Sensors, Digital Sign Boards, Automatic Notification System(for passengers), it would require NO HUMAN Interference at all, be it by passengers or backend officials, except for maintenance. Though our project is original, it is based on 2 peer reviwed research papers.
 
 How to use the software in the real Hyperloop Station.
 
